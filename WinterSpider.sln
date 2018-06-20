@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinterSpider", "WinterSpider\WinterSpider.csproj", "{8CDD1C09-8406-4D73-838B-DDA7B77EE536}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinterSpider.Host", "WinterSpider.Host\WinterSpider.Host.csproj", "{F86EC978-04C9-4E32-BD86-CEEB47502214}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinterSpider.Http", "WinterSpider.Http\WinterSpider.Http.csproj", "{D548D7E1-17AC-403D-8628-F1B27B73DBF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7079F9C0-B42F-4422-89B9-AE500681A1BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickTest", "test\QuickTest\QuickTest.csproj", "{A756D6E3-8425-4016-A57A-D06693C34DAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinterSpider.Model", "WinterSpider.Model\WinterSpider.Model.csproj", "{B3834421-AA44-4108-8397-4CDC64666841}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8CDD1C09-8406-4D73-838B-DDA7B77EE536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CDD1C09-8406-4D73-838B-DDA7B77EE536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CDD1C09-8406-4D73-838B-DDA7B77EE536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CDD1C09-8406-4D73-838B-DDA7B77EE536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F86EC978-04C9-4E32-BD86-CEEB47502214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F86EC978-04C9-4E32-BD86-CEEB47502214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F86EC978-04C9-4E32-BD86-CEEB47502214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F86EC978-04C9-4E32-BD86-CEEB47502214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D548D7E1-17AC-403D-8628-F1B27B73DBF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D548D7E1-17AC-403D-8628-F1B27B73DBF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D548D7E1-17AC-403D-8628-F1B27B73DBF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D548D7E1-17AC-403D-8628-F1B27B73DBF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A756D6E3-8425-4016-A57A-D06693C34DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A756D6E3-8425-4016-A57A-D06693C34DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A756D6E3-8425-4016-A57A-D06693C34DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A756D6E3-8425-4016-A57A-D06693C34DAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3834421-AA44-4108-8397-4CDC64666841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3834421-AA44-4108-8397-4CDC64666841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3834421-AA44-4108-8397-4CDC64666841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3834421-AA44-4108-8397-4CDC64666841}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A756D6E3-8425-4016-A57A-D06693C34DAA} = {7079F9C0-B42F-4422-89B9-AE500681A1BF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2415F51-3851-443E-A71B-D493BEB47BE7}
+	EndGlobalSection
+EndGlobal
