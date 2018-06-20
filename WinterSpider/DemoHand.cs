@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using HtmlAgilityPack;
 using WinterSpider.Host;
@@ -13,118 +14,76 @@ namespace WinterSpider
         public HtmlDocument htmlDocument { get; set; }
         public void DoHandHtml(string html)
         {
-            
-
             htmlDocument = new HtmlDocument();
-            
             htmlDocument.LoadHtml(html);
-
-            var  list=   htmlDocument.DocumentNode.SelectNodes("//body/div/div/div");
-            foreach (var item in list)
+            var  list=   htmlDocument.DocumentNode.SelectNodes("//body/div[@class='mainbox']/div[@class='main']/div[@class='content']/div[@class='listBox']/ul/li");
+            int totle = list.Count - 1; //最后一个li是list
+            for (int i = 0; i < list.Count-1; i++)
             {
-                string name = item.Attributes["class"].Value;
-                if (name=="content")
+                var  houseInfo = new HouseInfo();
+                var desEle = list[i].SelectSingleNode("div[@class='des']");  //<div clas="des">
+                if (desEle!=null)
                 {
-                    var liDocument=  item.SelectNodes("//div/ul/li/div/div/b"); //价钱
-
-                    var time=  item.SelectNodes("//div/ul/li/div"); //时间
-                    
-
-                    var titleDocument = item.SelectNodes("//div/ul/li/div"); //标题
-                    
-                    
-                    var document = item.SelectNodes("//div/ul/li/div/p"); //
-
-
-                    int flag = 0;
-                    
-                    foreach (var money in liDocument)
+                    var titleEle = desEle.SelectSingleNode("h2/a");  //title
+                    if (titleEle!=null)
                     {
-                        _houseInfos.Add(new HouseInfo()
-                        {
-                           Price= money.InnerText
-                        });
-                        
+                        houseInfo.Title = titleEle.InnerText.Replace(" ","").Replace("\n","");
+                        houseInfo.Url = titleEle.GetAttributeValue("href", "");
                     }
 
-                    foreach (var title in titleDocument)
+                    var roomDes = desEle.SelectSingleNode("p[@class='room']");
+                    string romText = roomDes.InnerText.Replace("&nbsp;&nbsp;&nbsp;&nbsp;","");
+                    string[] arr = romText.Split(' ');
+                    houseInfo.Type = arr[0];
+                    houseInfo.Size = arr[arr.Length - 1];
+
+
+                    var addEle = desEle.SelectSingleNode("p[@class='add']");
+                    var firstA = addEle.SelectSingleNode("a[1]");
+                    var  lastA =  addEle.SelectSingleNode("a[last()]");
+                    if (firstA!=null)
                     {
-                        string className = title.GetAttributeValue("class","");
-
-                        if (className=="des")
-                        {
-                            var singleTitleEle = title.SelectSingleNode("//h2/a");
-                            Console.WriteLine( singleTitleEle.InnerText+","+flag);
-                            flag++;
-                        }
-
-                        /*var  refObj=  _houseInfos[flag];
-                        
-                        refObj.Title =     title.InnerText.Trim() ;
-                        refObj.Url = title.Attributes["href"].Value;
-                        flag++;*/
+                        houseInfo.Address = firstA.InnerText;
                     }
-
-                    flag = 0;
-                    foreach (var  pRef in document)
+                    if (lastA!=null)
                     {
-                        string className = pRef.GetAttributeValue("class","");
-                        if (className=="room")
-                        {
-                            //todo  房型 
-                            
-                            var  refObj=  _houseInfos[flag];
-                            refObj.Type = pRef.InnerText;
-                            
-                            flag++;
-                            
-                        }
-                         if (className=="add")
-                        {
-                              var addressDoment = pRef.SelectNodes("//a");
-                           
-                               string  text =   pRef.ChildNodes[1].InnerText;
-                               string  comu =   pRef.ChildNodes[3].InnerText;
-
-                                Console.WriteLine(text);
-
-                                var  refObj=  _houseInfos[flag];
-                                refObj.Address = text;
-                                 refObj.Community = comu;
-
-                                flag++;
-                                
-                            
-                        }
+                        houseInfo.Community = firstA.InnerText;
                     }
+                    
+                    var listlirightEle = list[i].SelectSingleNode("div[@class='listliright']");  //<div clas="listliright">
 
-                    flag = 0;
-                    foreach (var timeDoc in time)
+
+                    if (listlirightEle!=null)
                     {
-                        string className = timeDoc.GetAttributeValue("class","");
+                        var sendTimeEle = listlirightEle.SelectSingleNode("div[@class='sendTime']");
 
-                        if (className=="sendTime")
+                        var moneyEle = listlirightEle.SelectSingleNode("div[@class='money']/b");
+
+                        if (sendTimeEle!=null)
                         {
-                            string timeText = timeDoc.InnerText;
+                            string text = sendTimeEle.InnerText;
 
-                            if (timeText.Contains("前"))
+                            if (string.IsNullOrEmpty(text)||text.Contains("前"))
                             {
-                                timeText = $"{DateTime.Now.Month}-{DateTime.Now.Day}";
-                                
+                                text = $"{DateTime.Now.Month}-{DateTime.Now.Day}";
                             }
-                            var  refObj=  _houseInfos[flag];
-                            refObj.SendTime = timeText;
-                            Console.WriteLine(refObj.SendTime);
+                            houseInfo.SendTime =text;
 
-                            flag++;
+                        }
+
+                        if (moneyEle!=null)
+                        {
+                            houseInfo.Price = moneyEle.InnerText;
                         }
                     }
+                    
+                    _houseInfos.Add(houseInfo);
 
-
-                    int a = 0;
                 }
-                
             }
+            
+
+            
             
         }
     }
