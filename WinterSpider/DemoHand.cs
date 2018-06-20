@@ -14,7 +14,7 @@ namespace WinterSpider
         public void DoHandHtml(string html)
         {
             
-            throw  new Exception("asdf");
+
             htmlDocument = new HtmlDocument();
             
             htmlDocument.LoadHtml(html);
@@ -30,7 +30,7 @@ namespace WinterSpider
                     var time=  item.SelectNodes("//div/ul/li/div"); //时间
                     
 
-                    var titleDocument = item.SelectNodes("//div/ul/li/div/h2/a"); //标题
+                    var titleDocument = item.SelectNodes("//div/ul/li/div"); //标题
                     
                     
                     var document = item.SelectNodes("//div/ul/li/div/p"); //
@@ -49,41 +49,48 @@ namespace WinterSpider
 
                     foreach (var title in titleDocument)
                     {
+                        string className = title.GetAttributeValue("class","");
 
-                        
-                        Console.WriteLine( title.InnerText);
+                        if (className=="des")
+                        {
+                            var singleTitleEle = title.SelectSingleNode("//h2/a");
+                            Console.WriteLine( singleTitleEle.InnerText+","+flag);
+                            flag++;
+                        }
 
-                        
-                        var  refObj=  _houseInfos[flag];
+                        /*var  refObj=  _houseInfos[flag];
                         
                         refObj.Title =     title.InnerText.Trim() ;
                         refObj.Url = title.Attributes["href"].Value;
-                        flag++;
+                        flag++;*/
                     }
 
                     flag = 0;
                     foreach (var  pRef in document)
                     {
-                        string className = pRef.Attributes["class"].Value;
+                        string className = pRef.GetAttributeValue("class","");
                         if (className=="room")
                         {
                             //todo  房型 
                             
-                            Console.WriteLine(pRef.InnerText);
+                            var  refObj=  _houseInfos[flag];
+                            refObj.Type = pRef.InnerText;
+                            
+                            flag++;
                             
                         }
                          if (className=="add")
                         {
-                            var addressDoment = pRef.SelectNodes("//a");
+                              var addressDoment = pRef.SelectNodes("//a");
                            
-                               string  text =   pRef.ChildNodes[0].InnerText;
-                               string  comu =   pRef.ChildNodes[1].InnerText;
+                               string  text =   pRef.ChildNodes[1].InnerText;
+                               string  comu =   pRef.ChildNodes[3].InnerText;
 
                                 Console.WriteLine(text);
 
                                 var  refObj=  _houseInfos[flag];
                                 refObj.Address = text;
-                              refObj.Community = comu;
+                                 refObj.Community = comu;
 
                                 flag++;
                                 
@@ -94,7 +101,7 @@ namespace WinterSpider
                     flag = 0;
                     foreach (var timeDoc in time)
                     {
-                        string className = timeDoc.Attributes["class"].Value;
+                        string className = timeDoc.GetAttributeValue("class","");
 
                         if (className=="sendTime")
                         {
