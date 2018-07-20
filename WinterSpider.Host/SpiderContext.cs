@@ -83,6 +83,8 @@ namespace WinterSpider.Host
                     var  list = _serviceProvider.GetService<IEnumerable<IHandHtml>>();
                     foreach (var item in list)
                     {
+
+
                         item.DoHandHtml(html);
                     }
                 }

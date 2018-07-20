@@ -3,15 +3,27 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore.Internal;
+using WinterSpider.Core;
 using WinterSpider.Host;
 using WinterSpider.Model;
+using WinterSpider.SqlDal;
 
 namespace WinterSpider
 {
     public class DemoHand:IHandHtml
     {
-        IList<HouseInfo> _houseInfos = new List<HouseInfo>();
+        List<HouseInfo> _houseInfos = new List<HouseInfo>();
         public HtmlDocument htmlDocument { get; set; }
+        private HouseInfoContext _houseInfoContext;
+
+        public DemoHand(HouseInfoContext houseInfoContext)
+        {
+            _houseInfoContext = houseInfoContext;
+        }
+
+        public bool IsOnceTask { get; } = false;
+
         public void DoHandHtml(string html)
         {
             htmlDocument = new HtmlDocument();
@@ -30,7 +42,7 @@ namespace WinterSpider
                         houseInfo.Title = titleEle.InnerText.Replace(" ","").Replace("\n","");
                         houseInfo.Url = titleEle.GetAttributeValue("href", "");
                     }
-
+                    
                     var roomDes = desEle.SelectSingleNode("p[@class='room']");
                     string romText = roomDes.InnerText.Replace("&nbsp;&nbsp;&nbsp;&nbsp;","");
                     string[] arr = romText.Split(' ');
@@ -52,7 +64,6 @@ namespace WinterSpider
                     
                     var listlirightEle = list[i].SelectSingleNode("div[@class='listliright']");  //<div clas="listliright">
 
-
                     if (listlirightEle!=null)
                     {
                         var sendTimeEle = listlirightEle.SelectSingleNode("div[@class='sendTime']");
@@ -61,7 +72,7 @@ namespace WinterSpider
 
                         if (sendTimeEle!=null)
                         {
-                            string text = sendTimeEle.InnerText;
+                            string text = sendTimeEle.InnerText.Replace(" ","").TrimEnd();
 
                             if (string.IsNullOrEmpty(text)||text.Contains("前"))
                             {
@@ -76,11 +87,26 @@ namespace WinterSpider
                             houseInfo.Price = moneyEle.InnerText;
                         }
                     }
-                    
-                    _houseInfos.Add(houseInfo);
 
+                    houseInfo.Id = SpiderHelper.Md5Encrypt(houseInfo.Title+houseInfo.Address+houseInfo.Community+houseInfo.Type);
+                    Console.WriteLine(houseInfo.Id+"-"+houseInfo.SendTime);
+                    _houseInfos.Add(houseInfo);
+                    
+                    
                 }
             }
+            using (_houseInfoContext)
+            {
+
+               
+               _houseInfoContext.HouseInfos.AddRangeAsync(_houseInfos.Distinct());
+                
+
+                _houseInfoContext.SaveChanges();
+
+                
+            }
+
             
 
             

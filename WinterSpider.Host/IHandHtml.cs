@@ -9,6 +9,9 @@ namespace WinterSpider.Host
     {
         HtmlDocument htmlDocument { get; set; }
 
+        
+        bool IsOnceTask { get; }
+
         void DoHandHtml(string  html);
     }
 }

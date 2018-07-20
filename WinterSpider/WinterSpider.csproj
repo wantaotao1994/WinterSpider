@@ -9,7 +9,9 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WinterSpider.Core\WinterSpider.Core.csproj" />
     <ProjectReference Include="..\WinterSpider.Host\WinterSpider.Host.csproj" />
     <ProjectReference Include="..\WinterSpider.Model\WinterSpider.Model.csproj" />
+    <ProjectReference Include="..\WinterSpider.SqlDal\WinterSpider.SqlDal.csproj" />
   </ItemGroup>
 </Project>
